@@ -2,85 +2,56 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\people;
-use App\Http\Requests\StorepeopleRequest;
-use App\Http\Requests\UpdatepeopleRequest;
+use App\Http\Requests\PeoplePostRequest;
+use App\Models\People;
+use App\Http\Requests\StorePeopleRequest;
+use App\Http\Requests\UpdatePeopleRequest;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Database\Schema\Blueprint;
 
 class PeopleController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
+    public function index():JsonResponse
     {
-        //
+        return response()->json(People::all(),200);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+    public function store(StorePeopleRequest $request)
     {
-        //
+        $people = People::create($request->all());
+        return response()->json([
+            'status'=> true,
+            'message'=> "People added to db. Success",
+            'people'=> $people
+        ],201);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \App\Http\Requests\StorepeopleRequest  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(StorepeopleRequest $request)
+    public function show(People $people):JsonResponse
     {
-        //
+        return response()->json([
+            'status'=> true,
+            'message'=> "People show. Success",
+            'people'=> $people
+        ],200);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\people  $people
-     * @return \Illuminate\Http\Response
-     */
-    public function show(people $people)
+    public function update(UpdatePeopleRequest $request, People $people)
     {
-        //
+        $people->update(['phone' => $request]);
+        return response()->json([
+            'status'=> true,
+            'message'=> "People update to db. Success"
+        ],201);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\people  $people
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(people $people)
+    public function delete(People $people):JsonResponse
     {
-        //
+        $people->delete();
+        return response()->json([
+            'status'=> true,
+            'message'=> "People delete from db. Success"
+        ],200);
     }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \App\Http\Requests\UpdatepeopleRequest  $request
-     * @param  \App\Models\people  $people
-     * @return \Illuminate\Http\Response
-     */
-    public function update(UpdatepeopleRequest $request, people $people)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\people  $people
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(people $people)
-    {
-        //
-    }
+    
 }
