@@ -36,9 +36,9 @@ class PeopleController extends Controller
         ],200);
     }
 
-    public function update(UpdatePeopleRequest $request, People $people)
+    public function update(StorePeopleRequest $request, People $people)
     {
-        $people->update(['phone' => $request]);
+        $people->update($request->all());
         return response()->json([
             'status'=> true,
             'message'=> "People update to db. Success"
